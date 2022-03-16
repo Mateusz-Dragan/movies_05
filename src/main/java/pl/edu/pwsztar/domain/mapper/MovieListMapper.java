@@ -6,24 +6,22 @@ import pl.edu.pwsztar.domain.entity.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MovieListMapper implements Converter<List<MovieDto>, List<Movie>> {
 
     @Override
     public List<MovieDto> convert(List<Movie> movies) {
-        List<MovieDto> moviesDto = new ArrayList<>();
+        List<MovieDto> moviesDto = movies.stream().map(x->new MovieDto.Builder()
+            .title(x.getTitle())
+            .image(x.getImage())
+            .year(x.getYear())
+            .build()).collect(Collectors.toList());
 
-        for(Movie movie: movies) {
-            MovieDto movieDto = new MovieDto.Builder()
-                    .movieId(movie.getMovieId())
-                    .title(movie.getTitle())
-                    .image(movie.getImage())
-                    .year(movie.getYear())
-                    .build();
 
-            moviesDto.add(movieDto);
-        }
+
+
 
         return moviesDto;
     }
